@@ -1,17 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Meadow;
+﻿using Meadow;
 using Meadow.Devices;
 using Meadow.Foundation;
+using Meadow.Foundation.Displays.TftSpi;
+using Meadow.Foundation.Graphics;
 using Meadow.Foundation.Leds;
+using Meadow.Hardware;
+using System;
+using System.Threading;
 
 namespace meadowBallAnimation
 {
+    class Ellipse
+    {
+        //public void DrawCircle(int centerX, int centerY, int radius, Color color, bool filled = false, bool centerBetweenPixels = false)
+        public int centerX { get; set; }
+        public int centerY { get; set; }
+        public int radius { get; set; }
+        public Color color { get; set; }
+    }
+
     class Ball
     {
+        St7735 st7735;
+        GraphicsLibrary graphics;
+
         public int diameter { get; }
 
         public int positionX { get; set; }
@@ -26,7 +38,7 @@ namespace meadowBallAnimation
 
         public Color ballColor { get; }
 
-        public Ellipse circle;
+        public Ellipse circle;  //Need something to replace this
 
         public Ball(int diameter,
                     int positionX,
@@ -48,7 +60,8 @@ namespace meadowBallAnimation
 
         private void CreateBall()
         {
-            
+            circle = new Ellipse();
         }
+
     }
 }
