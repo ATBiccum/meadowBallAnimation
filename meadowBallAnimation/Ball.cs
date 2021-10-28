@@ -10,13 +10,25 @@ using System.Threading;
 
 namespace meadowBallAnimation
 {
-    class Ellipse
+    /*class Ellipse
     {
         //public void DrawCircle(int centerX, int centerY, int radius, Color color, bool filled = false, bool centerBetweenPixels = false)
         public int centerX { get; set; }
         public int centerY { get; set; }
         public int radius { get; set; }
         public Color color { get; set; }
+
+        public Ellipse(int centerX,
+                        int centerY,
+                        int radius,
+                        Color color)
+        {
+            this.centerX = centerX;
+            this.centerY = centerY;
+            this.radius = radius;
+            this.color = color;
+        }*/
+
     }
 
     class Ball
@@ -24,11 +36,13 @@ namespace meadowBallAnimation
         St7735 st7735;
         GraphicsLibrary graphics;
 
-        public int diameter { get; }
+        public int centerX { get; set; }
 
-        public int positionX { get; set; }
+        public int centerY { get; set; }
 
-        public int positionY { get; set; }
+        public int radius { get; }
+        
+        public Color ballColor { get; }
 
         public int speedX { get; set; }
 
@@ -36,31 +50,32 @@ namespace meadowBallAnimation
 
         public int frameRate { get; }
 
-        public Color ballColor { get; }
+        
 
-        public Ellipse circle;  //Need something to replace this
+        //public Ellipse circle;  //Need something to replace this
 
-        public Ball(int diameter,
-                    int positionX,
-                    int positionY,
+        public Ball(int centerX,
+                    int centerY,
+                    int radius,
                     int speedX,
                     int speedY,
                     int frameRate,
                     Color ballColor)
         {
-            this.diameter = diameter;
-            this.positionX = positionX;
-            this.positionY = positionY;
+            this.centerX = centerX;
+            this.centerY = centerY;
+            this.radius = radius;
+            this.ballColor = ballColor;
             this.speedX = speedX;
             this.speedY = speedY;
-            this.ballColor = ballColor;
+            this.frameRate = frameRate;
             CreateBall();
 
         }
 
         private void CreateBall()
         {
-            circle = new Ellipse();
+               
         }
 
     }
