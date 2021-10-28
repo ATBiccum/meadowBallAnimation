@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media;
-using System.Windows.Shapes;
+using Meadow;
+using Meadow.Devices;
+using Meadow.Foundation;
+using Meadow.Foundation.Leds;
 
 namespace meadowBallAnimation
 {
@@ -25,5 +27,28 @@ namespace meadowBallAnimation
         public Color ballColor { get; }
 
         public Ellipse circle;
+
+        public Ball(int diameter,
+                    int positionX,
+                    int positionY,
+                    int speedX,
+                    int speedY,
+                    int frameRate,
+                    Color ballColor)
+        {
+            this.diameter = diameter;
+            this.positionX = positionX;
+            this.positionY = positionY;
+            this.speedX = speedX;
+            this.speedY = speedY;
+            this.ballColor = ballColor;
+            CreateBall();
+
+        }
+
+        private void CreateBall()
+        {
+            
+        }
     }
 }

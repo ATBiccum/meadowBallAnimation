@@ -1,70 +1,43 @@
 ﻿using Meadow;
 using Meadow.Devices;
 using Meadow.Foundation;
-using Meadow.Foundation.Leds;
 using Meadow.Foundation.Displays.TftSpi;
+using Meadow.Foundation.Graphics;
+using Meadow.Foundation.Leds;
+using Meadow.Hardware;
 using System;
 using System.Threading;
 
-
-namespace meadowBallAnimation
+namespace MeadowClockGraphics
 {
     public class MeadowApp : App<F7Micro, MeadowApp>
     {
-        RgbPwmLed onboardLed;
+        readonly Color WatchBackgroundColor = Color.White;
+
+        St7735 st7735;
+        GraphicsLibrary graphics;
+        int displayWidth, displayHeight;
+        int hour, minute, second, tick;
 
         public MeadowApp()
         {
-            Initialize();
-            CycleColors(1000);
+            var led = new RgbLed(Device, Device.Pins.OnboardLedRed, Device.Pins.OnboardLedGreen, Device.Pins.OnboardLedBlue);
+            led.SetColor(RgbLed.Colors.Red);
+
+            var config = new SpiClockConfiguration(6000, SpiClockConfiguration.Mode.Mode3);
+            st7735 = new St7735
+            (
+                device: Device,
+                spiBus: Device.CreateSpiBus(Device.Pins.SCK, Device.Pins.MOSI, Device.Pins.MISO, config), //Old pinouts
+                                                                                                          //spiBus: Device.CreateSpiBus(Device.Pins.SCK, Device.Pins.COPI, Device.Pins.CIPO, config),   //Changed MOSI and MISO To COPI and CIPO, new pin names
+                chipSelectPin: Device.Pins.D02,
+                dcPin: Device.Pins.D01,
+                resetPin: Device.Pins.D00,
+                width: 128, height: 160, St7735.DisplayType.ST7735R                                         //Added "St7735.DisplayType.ST7735R" from meadow website
+            );
+
+            //Call functions here
+
         }
-
-        void Initialize()
-        {
-            Console.WriteLine("Initialize hardware...");
-
-            onboardLed = new RgbPwmLed(device: Device,
-                redPwmPin: Device.Pins.OnboardLedRed,
-                greenPwmPin: Device.Pins.OnboardLedGreen,
-                bluePwmPin: Device.Pins.OnboardLedBlue,
-                3.3f, 3.3f, 3.3f,
-                Meadow.Peripherals.Leds.IRgbLed.CommonType.CommonAnode);
-        }
-
-        void CycleColors(int duration)
-        {
-            Console.WriteLine("Cycle colors...");
-
-            while (true)
-            {
-                ShowColorPulse(Color.Blue, duration);
-                ShowColorPulse(Color.Cyan, duration);
-                ShowColorPulse(Color.Green, duration);
-                ShowColorPulse(Color.GreenYellow, duration);
-                ShowColorPulse(Color.Yellow, duration);
-                ShowColorPulse(Color.Orange, duration);
-                ShowColorPulse(Color.OrangeRed, duration);
-                ShowColorPulse(Color.Red, duration);
-                ShowColorPulse(Color.MediumVioletRed, duration);
-                ShowColorPulse(Color.Purple, duration);
-                ShowColorPulse(Color.Magenta, duration);
-                ShowColorPulse(Color.Pink, duration);
-            }
-        }
-
-        void ShowColorPulse(Color color, int duration = 1000)
-        {
-            onboardLed.StartPulse(color, (duration / 2));
-            Thread.Sleep(duration);
-            onboardLed.Stop();
-        }
-
-        void ShowColor(Color color, int duration = 1000)
-        {
-            Console.WriteLine($"Color: {color}");
-            onboardLed.SetColor(color);
-            Thread.Sleep(duration);
-            onboardLed.Stop();
-        }
-    }
+    }  
 }
