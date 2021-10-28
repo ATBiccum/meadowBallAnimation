@@ -6,6 +6,7 @@ using Meadow.Foundation.Displays.TftSpi;
 using System;
 using System.Threading;
 
+
 namespace meadowBallAnimation
 {
     public class MeadowApp : App<F7Micro, MeadowApp>
