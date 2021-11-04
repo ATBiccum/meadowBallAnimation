@@ -57,22 +57,22 @@ namespace meadowBallAnimation
         }
         public void BounceBall(double actualWidth, double actualHeight)
         {
-            if (positionX + radius > actualWidth) //If the positionX + diameter is greater than the width the change direction
+            if (positionX + radius*2 > actualWidth) //If the positionX + diameter is greater than the width the change direction
             {
                 speedX *= -1; //Reverse direction of the ball in X axis
             }
 
-            if (positionY + radius > actualHeight) //If the positionY + diameter is greater than the height the change direction
+            if (positionY + radius*2 > actualHeight) //If the positionY + diameter is greater than the height the change direction
             {
                 speedY *= -1; //Reverse direction of the ball in Y axis
             }
 
-            if (positionX < 0) //If the ball hits the left side 
+            if (positionX - radius*2 < 0) //If the ball hits the left side 
             {
                 speedX *= -1; //Reverse direction of the ball in X axis
             }
 
-            if (positionY < 0) //Reverse direction of the ball in the Y axis
+            if (positionY - radius*2 < 0) //Reverse direction of the ball in the Y axis
             {
                 speedY *= -1; //Reverse direction of the ball in Y axis
             }
