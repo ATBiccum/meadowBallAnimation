@@ -8,18 +8,40 @@ using Meadow.Hardware;
 using System;
 using System.Threading;
 
-namespace MeadowClockGraphics
+namespace meadowBallAnimation
 {
     public class MeadowApp : App<F7Micro, MeadowApp>
-    {
-        readonly Color WatchBackgroundColor = Color.White;
-
+    { 
         St7735 st7735;
         GraphicsLibrary graphics;
-        int displayWidth, displayHeight;
-        int hour, minute, second, tick;
+        Ball ball;
 
+        static int displayWidth = 128;
+        static int displayHeight = 160;
+        int radius = 10;
+        int positionX = displayWidth / 2;
+        int positionY = displayHeight / 2;
+        int speedX = 10;
+        int speedY = 10;
+        Color ballColor = Color.Yellow;
+        Color BackgroundColor = Color.White;
+        
+
+        DateTime lastDateTime = new DateTime();
+
+        private const int MOVE_INTERVAL = 200;
+
+        private readonly System.Timers.Timer moveTimer = new System.Timers.Timer(MOVE_INTERVAL);
+
+        public object LockObject
+        {
+            get { return this.graphics; }
+        }
         public MeadowApp()
+        {
+            Initialize();
+        }
+        void Initialize()
         {
             var led = new RgbLed(Device, Device.Pins.OnboardLedRed, Device.Pins.OnboardLedGreen, Device.Pins.OnboardLedBlue);
             led.SetColor(RgbLed.Colors.Red);
@@ -28,16 +50,32 @@ namespace MeadowClockGraphics
             st7735 = new St7735
             (
                 device: Device,
-                spiBus: Device.CreateSpiBus(Device.Pins.SCK, Device.Pins.MOSI, Device.Pins.MISO, config), //Old pinouts
-                                                                                                          //spiBus: Device.CreateSpiBus(Device.Pins.SCK, Device.Pins.COPI, Device.Pins.CIPO, config),   //Changed MOSI and MISO To COPI and CIPO, new pin names
+                spiBus: Device.CreateSpiBus(Device.Pins.SCK, Device.Pins.MOSI, Device.Pins.MISO, config), 
+                                                                                                          
                 chipSelectPin: Device.Pins.D02,
                 dcPin: Device.Pins.D01,
                 resetPin: Device.Pins.D00,
-                width: 128, height: 160, St7735.DisplayType.ST7735R                                         //Added "St7735.DisplayType.ST7735R" from meadow website
+                width: displayWidth, height: displayHeight, St7735.DisplayType.ST7735R_BlackTab  
             );
 
-            //Call functions here
+            ball = new Ball
+            (
+                displayWidth: displayWidth,
+                displayHeight: displayHeight,
+                backgroundColor: BackgroundColor,
+                radius: radius,
+                positionX: positionX,
+                positionY: positionY,
+                speedX: speedX,
+                speedY: speedY,
+                ballColor: ballColor
+            );
 
+            graphics = new GraphicsLibrary(st7735);
+
+            graphics.Clear(true);
+
+            moveTimer.AutoReset = true;
         }
     }  
 }
