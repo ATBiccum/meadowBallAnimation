@@ -10,73 +10,74 @@ using System.Threading;
 
 namespace meadowBallAnimation
 {
-    /*class Ellipse
-    {
-        //public void DrawCircle(int centerX, int centerY, int radius, Color color, bool filled = false, bool centerBetweenPixels = false)
-        public int centerX { get; set; }
-        public int centerY { get; set; }
-        public int radius { get; set; }
-        public Color color { get; set; }
-
-        public Ellipse(int centerX,
-                        int centerY,
-                        int radius,
-                        Color color)
-        {
-            this.centerX = centerX;
-            this.centerY = centerY;
-            this.radius = radius;
-            this.color = color;
-        }*/
-
-    }
-
     class Ball
     {
-        St7735 st7735;
-        GraphicsLibrary graphics;
+        public int radius{ get; }
 
-        public int centerX { get; set; }
+        public int positionY { get; set; }
 
-        public int centerY { get; set; }
-
-        public int radius { get; }
-        
-        public Color ballColor { get; }
+        public int positionX { get; set; }
 
         public int speedX { get; set; }
 
         public int speedY { get; set; }
 
-        public int frameRate { get; }
+        public Color ballColor { get; }
+       
+        public int displayWidth { get; }
 
-        
+        public int displayHeight { get; }
 
-        //public Ellipse circle;  //Need something to replace this
+        public Color backgroundColor { get; }
 
-        public Ball(int centerX,
-                    int centerY,
-                    int radius,
+        public Ball(int radius,
+                    int positionY,
+                    int positionX,
                     int speedX,
                     int speedY,
-                    int frameRate,
-                    Color ballColor)
+                    Color ballColor,
+                    int displayWidth,
+                    int displayHeight,
+                    Color backgroundColor)
         {
-            this.centerX = centerX;
-            this.centerY = centerY;
             this.radius = radius;
-            this.ballColor = ballColor;
+            this.positionY = positionY;
+            this.positionX = positionX;
             this.speedX = speedX;
             this.speedY = speedY;
-            this.frameRate = frameRate;
-            CreateBall();
-
+            this.ballColor = ballColor;
+            this.displayWidth = displayWidth;
+            this.displayHeight = displayHeight;
+            this.backgroundColor = backgroundColor;
         }
-
-        private void CreateBall()
+        public void MoveBall()
         {
-               
+            positionX += speedX;
+            positionY += speedY;
         }
+        public void BounceBall(double actualWidth, double actualHeight)
+        {
+            if (positionX + radius > actualWidth) //If the positionX + diameter is greater than the width the change direction
+            {
+                speedX *= -1; //Reverse direction of the ball in X axis
+            }
 
+            if (positionY + radius > actualHeight) //If the positionY + diameter is greater than the height the change direction
+            {
+                speedY *= -1; //Reverse direction of the ball in Y axis
+            }
+
+            if (positionX < 0) //If the ball hits the left side 
+            {
+                speedX *= -1; //Reverse direction of the ball in X axis
+            }
+
+            if (positionY < 0) //Reverse direction of the ball in the Y axis
+            {
+                speedY *= -1; //Reverse direction of the ball in Y axis
+            }
+        }
     }
 }
+
+
