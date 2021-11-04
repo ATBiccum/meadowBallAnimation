@@ -36,7 +36,7 @@ namespace meadowBallAnimation
         St7735 st7735;
         GraphicsLibrary graphics;
         Ball ball;
-
+        //Variables for our ball constructor
         static int displayWidth = 128;
         static int displayHeight = 160;
         int radius = 10;
@@ -47,11 +47,10 @@ namespace meadowBallAnimation
         Color ballColor = Color.Yellow;
         Color BackgroundColor = Color.White;
         
-
         DateTime lastDateTime = new DateTime();
-
+        //Our "Frame Rate"
         private const int MOVE_INTERVAL = 200;
-
+        //Set our timer max to the interval
         private readonly System.Timers.Timer moveTimer = new System.Timers.Timer(MOVE_INTERVAL);
 
         public object LockObject
@@ -74,15 +73,19 @@ namespace meadowBallAnimation
             st7735 = new St7735 //Create a new instance of our display
             (
                 device: Device,
-                spiBus: Device.CreateSpiBus(Device.Pins.SCK, Device.Pins.MOSI, Device.Pins.MISO, config), 
-                                                                                                          
+                spiBus: Device.CreateSpiBus(Device.Pins.SCK, 
+                                            Device.Pins.MOSI, 
+                                            Device.Pins.MISO, 
+                                            config),                                                                                     
                 chipSelectPin: Device.Pins.D02,
                 dcPin: Device.Pins.D01,
                 resetPin: Device.Pins.D00,
-                width: displayWidth, height: displayHeight, St7735.DisplayType.ST7735R_BlackTab  
+                width: displayWidth, 
+                height: displayHeight, 
+                St7735.DisplayType.ST7735R_BlackTab  
             );
 
-            ball = new Ball
+            ball = new Ball //Create a new instance of our ball using parameters defined above
             (
                 displayWidth: displayWidth,
                 displayHeight: displayHeight,
@@ -98,11 +101,11 @@ namespace meadowBallAnimation
             graphics = new GraphicsLibrary(st7735);
 
             graphics.Clear(true);
-
+            //Initialize our timer and event handler
             moveTimer.AutoReset = true;
             moveTimer.Elapsed += MoveTimer_Elapsed;
             moveTimer.Start();
-            lastDateTime = DateTime.Now;
+            lastDateTime = DateTime.Now; 
 
             led.SetColor(RgbLed.Colors.Green);
         }
@@ -111,15 +114,15 @@ namespace meadowBallAnimation
         {
             lock(this.LockObject)
             {
-                graphics.Clear();  
+                graphics.Clear(true);  
             }
-
+            //Call our moveball and bounceball functions every 200ms
             ball.MoveBall();
             ball.BounceBall(displayWidth, displayHeight);
 
             lock(this.LockObject)
             {
-                graphics.DrawCircle
+                graphics.DrawCircle //Draw the circle on the screen using variables from above
                 (
                     centerX: ball.positionX,
                     centerY: ball.positionY,
@@ -127,7 +130,7 @@ namespace meadowBallAnimation
                     color: ball.ballColor,
                     filled: false
                 );
-                graphics.Show();
+                graphics.Show(); //Show the graphics
             }
         }
     }  
