@@ -7,6 +7,7 @@ using Meadow.Foundation.Leds;
 using Meadow.Hardware;
 using System;
 using System.Threading;
+using System.Timers;
 
 namespace meadowBallAnimation
 {
@@ -76,6 +77,35 @@ namespace meadowBallAnimation
             graphics.Clear(true);
 
             moveTimer.AutoReset = true;
+            moveTimer.Elapsed += MoveTimer_Elapsed;
+            moveTimer.Start();
+            lastDateTime = DateTime.Now;
+
+            led.SetColor(RgbLed.Colors.Green);
+        }
+
+        private void MoveTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            lock(this.LockObject)
+            {
+                graphics.Clear();  
+            }
+
+            ball.MoveBall();
+            ball.BounceBall(displayWidth, displayHeight);
+
+            lock(this.LockObject)
+            {
+                graphics.DrawCircle
+                (
+                    centerX: ball.positionX,
+                    centerY: ball.positionY,
+                    radius: ball.radius,
+                    color: ball.ballColor,
+                    filled: false
+                );
+                graphics.Show();
+            }
         }
     }  
 }
