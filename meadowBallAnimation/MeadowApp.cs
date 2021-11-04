@@ -1,4 +1,24 @@
-﻿using Meadow;
+﻿/* meadowBallAnimation Project
+ * 
+ * ECET 230
+ * Camosun College
+ * Tony Biccum
+ * November 4th, 2021
+ * 
+ * This project creates a ball on the ST7735 display and 
+ * bounces it off the edges. We use an Initialize function to setup our 
+ * meadow board, and create an instance of our ball from the ball class.
+ * We do some timing in this as well to produce a frame rate for the ball
+ * and the screen. To draw the ball we use an event handler based on this
+ * timer. Every time the timer interval is hit we trigger the event handler
+ * and draw the ball on the screen. This replaced our framerate from the
+ * WPF version of this app. We then use the drawcircle function from
+ * the meadow graphics library to draw our ball using pre defined 
+ * parameters.
+ * 
+ */
+
+using Meadow;
 using Meadow.Devices;
 using Meadow.Foundation;
 using Meadow.Foundation.Displays.TftSpi;
@@ -44,11 +64,14 @@ namespace meadowBallAnimation
         }
         void Initialize()
         {
-            var led = new RgbLed(Device, Device.Pins.OnboardLedRed, Device.Pins.OnboardLedGreen, Device.Pins.OnboardLedBlue);
-            led.SetColor(RgbLed.Colors.Red);
+            var led = new RgbLed(Device, 
+                                Device.Pins.OnboardLedRed, 
+                                Device.Pins.OnboardLedGreen, 
+                                Device.Pins.OnboardLedBlue);
+            led.SetColor(RgbLed.Colors.Red); //Turn on the red led before initialization
 
-            var config = new SpiClockConfiguration(6000, SpiClockConfiguration.Mode.Mode3);
-            st7735 = new St7735
+            var config = new SpiClockConfiguration(6000, SpiClockConfiguration.Mode.Mode3); //Setup our spi at 6000 baud
+            st7735 = new St7735 //Create a new instance of our display
             (
                 device: Device,
                 spiBus: Device.CreateSpiBus(Device.Pins.SCK, Device.Pins.MOSI, Device.Pins.MISO, config), 
